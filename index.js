@@ -15,6 +15,7 @@ async function run(){
     try{
         await client.connect();
         const productCollection = client.db('warehouse').collection('product');
+        const orderCollection = client.db('warehouse').collection('order');
         app.get('/product', async (req, res)=>{
             const query = {};
             const cursor = productCollection.find(query);
@@ -36,6 +37,12 @@ async function run(){
             const id = req.params.id;
             const query ={_id: ObjectId(id)};
             const result = await productCollection.deleteOne(query);
+            res.send(result)
+        })
+        app.post('/order', async(req, res) =>{
+            const newOrder = req.body;
+            console.log('adding new order', newOrder);
+            const result = await orderCollection.insertOne(newOrder)
             res.send(result)
         })
 

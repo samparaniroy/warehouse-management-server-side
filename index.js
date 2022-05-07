@@ -15,13 +15,21 @@ async function run(){
     try{
         await client.connect();
         const productCollection = client.db('warehouse').collection('product');
-        const orderCollection = client.db('warehouse').collection('order');
         app.get('/product', async (req, res)=>{
             const query = {};
             const cursor = productCollection.find(query);
             const products = await cursor.toArray();
             res.send(products)
         });
+        
+        //Get order api
+        app.get('/myitems',async(req,res) =>{
+            const email = req.query.email;
+            const query = {email:email}
+            const cursor = productCollection.find(query);
+            const services = await cursor.toArray();
+            res.send(services)
+        })
         app.get('/product/:id', async(req, res)=>{
             const id = req.params.id;
             const query ={_id: ObjectId(id)};
@@ -39,10 +47,16 @@ async function run(){
             const result = await productCollection.deleteOne(query);
             res.send(result)
         })
+        // app.get('/order', async(req, res) =>{
+        //     const query = {};
+        //     const cursor = orderCollection.find(query);
+        //     const orders = await cursor.toArray();
+        //     res.send(orders)
+        // })
         app.post('/order', async(req, res) =>{
             const newOrder = req.body;
             console.log('adding new order', newOrder);
-            const result = await orderCollection.insertOne(newOrder)
+            const result = await orderCollection.insertOne(newOrder);
             res.send(result)
         })
 

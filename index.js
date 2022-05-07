@@ -47,16 +47,10 @@ async function run(){
             const result = await productCollection.deleteOne(query);
             res.send(result)
         })
-        // app.get('/order', async(req, res) =>{
-        //     const query = {};
-        //     const cursor = orderCollection.find(query);
-        //     const orders = await cursor.toArray();
-        //     res.send(orders)
-        // })
-        app.post('/order', async(req, res) =>{
-            const newOrder = req.body;
-            console.log('adding new order', newOrder);
-            const result = await orderCollection.insertOne(newOrder);
+        app.delete('/myitems/:id', async(req, res) =>{
+            const id = req.params.id;
+            const query = {_id:ObjectId(id)};
+            const result = await productCollection.deleteOne(query);
             res.send(result)
         })
 
